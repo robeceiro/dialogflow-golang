@@ -1,11 +1,11 @@
 package main
 
 import (
-	"chatbot-core/core/utils"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -78,7 +78,7 @@ func (dp *DialogflowProcessor) init(a ...string) (err error) {
 	dp.ctx = context.Background()
 	sessionClient, err := dialogflow.NewSessionsClient(dp.ctx, option.WithCredentialsFile(dp.authJSONFilePath))
 	if err != nil {
-		utils.MyLogFatal("Error in auth with Dialogflow")
+		log.Fatal("Error in auth with Dialogflow")
 	}
 	dp.sessionClient = sessionClient
 
@@ -103,7 +103,7 @@ func (dp *DialogflowProcessor) processNLP(rawMessage string, username string) (r
 	}
 	response, err := dp.sessionClient.DetectIntent(dp.ctx, &request)
 	if err != nil {
-		utils.MyLogFatal("Error in communication with Dialogflow %s", err.Error())
+		log.Fatalf("Error in communication with Dialogflow %s", err.Error())
 		return
 	}
 	queryResult := response.GetQueryResult()
